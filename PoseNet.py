@@ -319,6 +319,10 @@ class PoseNet(object):
         _iter_count = 0
     
         #   datagen from Hourglass
+        # [0] : train image
+        # [1] : gaussian image ?? > 논문에는 없다. 여러소스에서 이걸 넣고 있다.
+        # [2] : train weight ?? > 실제 데이터를 까봐야.
+        # [3] : train mask ?? > 실제 데이터를 까봐야.
         self.generator = self.dataset._aux_generator(self.batch_size, stacks=self.stage, normalize = True, sample_set = 'train')
         self.valid_gen = self.dataset._aux_generator(self.batch_size, stacks=self.stage, normalize = True, sample_set = 'val')
 
