@@ -157,9 +157,11 @@ class CPM(PoseNet.PoseNet):
         Returns:
             net         : Output Tensor            
         """
+        
+        # inputs : 368x368x3 > NHWC                
         with tf.variable_scope(name):
             if net_type == 'ResNet':
-                net = self._conv_bn_relu(inputs, 64, 7, 2, 'SAME')
+                net = self._conv_bn_relu(inputs, 64, 7, 2, 'SAME') # filter = 64(output), kernel = 7, stride=2
                 #   down scale by 2
                 net = self._residual(net, 128, 'r1')
                 net = tf.contrib.layers.max_pool2d(net, [2,2], [2,2], padding='SAME', name='pool1')
@@ -204,11 +206,15 @@ class CPM(PoseNet.PoseNet):
         """
         with tf.variable_scope('CPM_stage'+str(stage_num)):
             if stage_num == 1:
+                # 논문그림에서와 network구조가 다름. 9x9 conv > 2x2 pooling > ... 이런구조가 아님.
                 net = self._conv_bn_relu(feat_map, 256, 3, 1, 'SAME', 'conv4_3_CPM', use_loaded=self.load_pretrained, lock=not self.training)
                 net = self._conv_bn_relu(net, 256, 3, 1, 'SAME', 'conv4_4_CPM', use_loaded=self.load_pretrained, lock=not self.training)
+                
                 net = self._conv_bn_relu(net, 256, 3, 1, 'SAME', 'conv4_5_CPM', use_loaded=self.load_pretrained, lock=not self.training)
                 net = self._conv_bn_relu(net, 256, 3, 1, 'SAME', 'conv4_6_CPM', use_loaded=self.load_pretrained, lock=not self.training)
+                
                 net = self._conv_bn_relu(net, 128, 3, 1, 'SAME', 'conv4_7_CPM', use_loaded=self.load_pretrained, lock=not self.training)
+                # 1x1 fc가 두개 > 이 부분만 같음. > 어떻게는 beif map(실제로 마지막 feature map)만 만들면 된다는 의미인듯~
                 net = self._conv_bn_relu(net, 512, 1, 1, 'SAME', 'conv5_1_CPM', use_loaded=self.load_pretrained, lock=not self.training)
                 net = self._conv(net, self.joint_num+1, 1, 1, 'SAME', 'conv5_2_CPM', use_loaded=self.load_pretrained, lock=not self.training)
                 return net
