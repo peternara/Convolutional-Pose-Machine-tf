@@ -6,6 +6,10 @@ Trainable with MPI dataset.
 
 Details are in [my blog](https://blog.csdn.net/mpsk07/article/details/79522809) in Chinese.
 
+![image](https://user-images.githubusercontent.com/6295576/44653246-2bcc7200-aa29-11e8-962d-da37f2d74c4b.png)
+
+
+
 ![CPM](https://raw.githubusercontent.com/mpskex/Convolutional-Pose-Machine-tf/master/demo/arch.png)
 
 #   Model: Convolutional Pose Machine
